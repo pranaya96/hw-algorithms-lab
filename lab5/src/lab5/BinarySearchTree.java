@@ -119,7 +119,7 @@ public class BinarySearchTree {
 
 		
     }
-<<<<<<< HEAD
+
     
     private List<Integer> traversedList = new ArrayList<Integer> ();
 
@@ -130,11 +130,8 @@ public class BinarySearchTree {
     		inOrder(root.rightChild);
     	}
     } 
-    // Returns the count of entries in this BinarySearchTree that are
-=======
 
     // Returns the number of entries in this BinarySearchTree that are
->>>>>>> 0a85d423bd43d0f7d8a49a7a1adc9f3a1a9168ac
     // less than value.
     public int numLessThan(int value) {
 
@@ -160,8 +157,6 @@ public class BinarySearchTree {
     	return 0;
     }
 
-<<<<<<< HEAD
-=======
     // Delete the given value in this tree if present
     // Returns true if the item was present and deleted.
     public boolean delete(int value) {
@@ -273,5 +268,4 @@ public class BinarySearchTree {
         }
         return true;
     }
->>>>>>> 0a85d423bd43d0f7d8a49a7a1adc9f3a1a9168ac
 }
