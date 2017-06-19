@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 public class BinarySearchTree {
 
@@ -93,78 +94,202 @@ public class BinarySearchTree {
 	}
     }
 
+    
+
     // Checks if this BinarySearchTree contains the given value.
     // Returns true iff the value is present in this BinarySearchTree.
-    public boolean find(int value) {
+    public boolean find(int value, Node root) {
 
 	// TODO: You should implement find() here.
 	// Note that you will likely want to implement a helper
 	// method in the Node class above
-    	Node newNode = new Node(value);
-    	newNode = this.root;
-    	while (newNode != null){
-    		if (newNode.value == value){
-    			return true;
-    		}
-    		else{
-    			if (newNode.value < value) {
-    				newNode = newNode.leftChild;
-    			}
-    			else{
-    				newNode = newNode.rightChild;
-    			}
-    		}
-    	}
-    	return false;
-
+        while (root != null){
+            if(root.value == value){
+                return true;
+            }
+            else if (value < root.value){
+                find(value, root.leftChild);
+                return true;
+            }
+            else{
+                find(value, root.rightChild);
+                return true;
+            }
+        }
+        return false;
 		
     }
 
     
-    private List<Integer> traversedList = new ArrayList<Integer> ();
-
-    public void inOrder(Node root){
-    	if (root != null){
-    		inOrder(root.leftChild);
-    		traversedList.add(root.value);
-    		inOrder(root.rightChild);
+    
+    public List putItems(Node newNode){
+    	List<Integer> resultList = new ArrayList<Integer> ();
+    	if(newNode== null){
+    		return resultList;
     	}
+    	Stack<Node> myStack = new Stack<Node>();
+    	myStack.push(newNode);
+    	while (!myStack.empty()){
+    		newNode= myStack.pop();
+    		resultList.add(newNode.value);
+    		if(newNode.leftChild!=null){
+    			myStack.push(newNode.leftChild);
+    		}
+    		if(newNode.rightChild != null){
+    			myStack.push(newNode.rightChild);
+    		}
+
+    	}
+    	return resultList;
+   
+
     } 
 
     // Returns the number of entries in this BinarySearchTree that are
     // less than value.
     public int numLessThan(int value) {
-
+    	Node n = this.root;
+    	List<Integer> list = new ArrayList<Integer>();
+    	list = putItems(n);
 	// TODO: You should implement numLessThan() here.
 	// Note that you will likely want to implement a helper
-	// method in the Node class above.
-    	Node newNode = new Node(value);
-    	newNode = this.root;
-    	while (newNode != null){
-    		if (newNode.value == value){
-    			inOrder(newNode);
-    			return (traversedList.size() -1);
-    		}
-    		else{
-    			if (newNode.value < value) {
-    				newNode = newNode.leftChild;
-    			}
-    			else{
-    				newNode = newNode.rightChild;
-    			}
+	// method in the Node class above
+        // System.out.println(list.toString());
+    	int counter = 0;
+    	for(int i=0; i < list.size(); i++){
+    		if (list.get(i) < value){
+    			counter+=1;
     		}
     	}
-    	return 0;
+       // Node current = this.root;
+       // while (current != null){
+       //      if(current.value == value){
+       //          inOrder(current);
+       //          for (int i =0; i < traversedList.size()-1; i++){
+       //  			System.out.println(traversedList.get(i));
+       //  		}
+       //          return(traversedList.size()-1);
+       //      }
+       //      else if (value < current.value){
+       //          current = current.leftChild;
+       //      }
+       //      else{
+       //          current = current.rightChild;
+       //      }
+       //  }
+       return counter;
     }
+
+    
+    // public Node getMinVal(Node node){
+    // 	Node sucessor = node.rightChild;
+    // 	while (sucessor != null){
+    // 		sucessor = sucessor.leftChild;
+    // 	}   
+    // 	return sucessor;
+    // 	// Node current = node;
+    // 	// if (current.leftChild == null){
+    // 	// 	return current;
+    // 	// } 
+    // 	// return getMin(current.leftChild);
+    // }
+
+
 
     // Delete the given value in this tree if present
     // Returns true if the item was present and deleted.
-    public boolean delete(int value) {
+    
 
-	// TODO: Implement delete here.
 
-	return false;
+    
+   public Node findNode(int value, Node node){
+   		if(node.value == value){
+   			return node;
+   		}
+   		else if(value < node.value){
+   			return findNode(value, node.leftChild);
+   		}
+   		else{
+   			return findNode(value, node.rightChild);
+   		}
+   }
+
+
+    // public Node deleteNode(Node node) {
+    // 	if (node.leftChild == null && node.rightChild == null) {
+    // 		node = null;
+    // 		return node;
+    // 	} else if (node.leftChild == null) {
+    // 		node = node.rightChild;
+    // 		return node;
+    // 	} else if (node.rightChild == null) {
+    // 		node = node.leftChild;
+    // 		return node;
+    // 	} else {
+    // 		int val = getMinVal(node).value ;
+    // 		deleteNode(getMinVal(node));
+    // 		node.value = val ;
+    // 		return node;
+    // 	}
+    // }
+
+
+    public Node minRightChild(Node node) {
+    	Node current = node ;
+    	while(current != null) {
+    		current = current.leftChild;
+    	}
+    	return current;
     }
+
+
+
+    public Node deleteTest(Node node, int value) {
+    	if (node == null) {
+    		return node;
+    	} else if (node.value > value) {
+    		node.leftChild = deleteTest(node.leftChild, value);
+    		return node;
+    	} else if (node.value < value) {
+    		node.rightChild = deleteTest(node.rightChild, value);
+    		return node;
+    	}
+
+    	if (node.leftChild == null && node.rightChild == null) {
+    		node = null ;
+    		return node;
+    	} else if (node.leftChild == null) {
+    		Node temp = node.rightChild;
+    		node = null;
+    		return temp; 
+    	} else if (node.rightChild == null) {
+    		Node temp = node.leftChild;
+    		node = null;
+    		return temp; 
+    	} 
+    	Node temp = minRightChild(node.rightChild);
+    	// System.out.println(temp);
+    	
+    	temp.value = node.value;
+    	// System.out.println("goes here");
+    	node.rightChild = deleteTest(node.rightChild, temp.value);
+    	return temp;
+     }
+
+    public boolean delete(int value) {
+    	this.root = deleteTest(root, value);
+    	return true;
+
+	// // TODO: Implement delete here
+ //    	Node a = findNode(value,root);
+    	
+ //    	System.out.println(deleteNode(a));
+ //    	return deleteNode(a);    	
+    }
+   
+
+
+
 
     //////////////////////////
     //                      //
